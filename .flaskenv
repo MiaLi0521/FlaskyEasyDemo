@@ -1,0 +1,4 @@
+APP_ADMIN=2689518718@qq.com
+FLASK_APP=flasky.py
+FLASK_ENV=development
+FLASKY_POSTS_PER_PAGE=2
