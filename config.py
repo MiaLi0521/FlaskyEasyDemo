@@ -41,6 +41,7 @@ class TestingConfig(Config):
     TESTING = True
     # 未指定环境变量时，测试换将将使用内存数据库sqlite
     SQLALCHEMy_DATABASE_URI = os.environ.get('TEST_DATABASE_URI') or 'sqlite://'
+    WTF_CSRF_ENABLED = False
 
 
 class ProductionConfig(Config):

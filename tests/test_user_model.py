@@ -143,8 +143,8 @@ class UserModelTestCase(unittest.TestCase):
         u = User(password='cat')
         db.session.add(u)
         db.session.commit()
-        self.assertTrue(datetime.datetime.utcnow() - u.member_since < 3)
-        self.assertTrue(datetime.datetime.utcnow() - u.last_seen < 3)
+        self.assertTrue((datetime.datetime.utcnow() - u.member_since).total_seconds() < 3)
+        self.assertTrue((datetime.datetime.utcnow() - u.last_seen).total_seconds() < 3)
 
     def test_ping(self):
         u = User(password='cat')

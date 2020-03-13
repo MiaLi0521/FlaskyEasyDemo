@@ -308,7 +308,7 @@ class Post(db.Model):
 
     def to_json(self):
         json_post = {
-            'self-url': url_for('api.get_post', id=self.id),
+            'self_url': url_for('api.get_post', id=self.id),
             'body': self.body,
             'body_html': self.body_html,
             'author_url': url_for('api.get_user', id=self.author_id),

@@ -1,4 +1,12 @@
 import os
+import sys
+
+COV = None
+if os.getenv('FLASK_COVERAGE'):
+    import coverage
+
+    COV = coverage.coverage(branch=True, include="app/*")
+    COV.start()
 
 import click
 from flask_migrate import Migrate
@@ -16,11 +24,32 @@ def make_shell_context():
 
 # 启动单元测试的命令
 @app.cli.command()
-def test():
-    """run the unit test"""
+@click.option('--coverage/--no-coverage', default=False, help='Run tests under code coverage.')
+def test(coverage):
+    """run the unit test
+    不推荐使用命令行的形式运行测试，一方面比较复杂，另一方面也可能存在潜在的BUG
+    注：使用此方式运行测试，Selenium测试总是不通过
+    """
+    if coverage and not os.getenv('FLASK_COVERAGE'):
+        import subprocess
+        os.environ['FLASK_COVERAGE'] = '1'
+        # ['flask', 'test', '--coverage'] 命令行参数列表
+        # 3.5之前没有subprocess.run()，故使用subprocess.call(),缺点是该方法返回的是命令的退出码，无法捕获命令输出内容
+        sys.exit(subprocess.call(sys.argv))
+
     import unittest
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
+    if COV:
+        COV.stop()
+        COV.save()
+        print('Coverage Summary:')
+        COV.report()
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        covdir = os.path.join(basedir, 'tmp/coverage')
+        COV.html_report(directory=covdir)
+        print('HTML version: file://{}/index.html'.format(covdir))
+        COV.erase()
 
 
 # 产生虚拟数据
@@ -47,4 +76,3 @@ def forge(user, post, follow, comment):
     follows(follow)
     click.echo('create comment...')
     comments(comment)
-
