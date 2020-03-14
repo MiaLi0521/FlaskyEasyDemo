@@ -25,6 +25,7 @@ markdown = "*"
 python-dotenv = "*"
 flask-httpauth = "*"
 httpie = "*"
+flask-debugtoolbar = "*"
 
 [requires]
 python_version = "3.6"

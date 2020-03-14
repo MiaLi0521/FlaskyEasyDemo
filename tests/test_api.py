@@ -187,9 +187,10 @@ class APITestCase(unittest.TestCase):
         # write a comment
         response = self.client.post('/api/v1/posts/{}/comments/'.format(u1.id),
                                     headers=self.get_api_headers(u2.email, 'bob'),
-                                    data=json.dumps({'body': 'Good [post](http://example.com)!'}))
+                                    json={'body': 'Good [post](http://example.com)!'})
         self.assertEqual(response.status_code, 201)
-        json_response = json.loads(response.get_data(as_text=True))
+        # json_response = json.loads(response.get_data(as_text=True))
+        json_response = response.get_json()
         url = response.headers.get('Location')
         self.assertIsNotNone(url)
         self.assertEqual(json_response['body'], 'Good [post](http://example.com)!')

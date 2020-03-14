@@ -11,8 +11,7 @@ from itsdangerous import BadSignature, SignatureExpired
 from flask_login import UserMixin, AnonymousUserMixin
 
 from app.exceptions import ValidationError
-from . import db
-from . import login_manager
+from app.extensions import db, login_manager
 
 
 class Permission:
@@ -280,12 +279,6 @@ class AnonymousUser(AnonymousUserMixin):
 
 
 login_manager.anonymous_user = AnonymousUser
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    """在Flask-Login需要获取已登录用户的信息时调用"""
-    return User.query.get(int(user_id))
 
 
 class Post(db.Model):

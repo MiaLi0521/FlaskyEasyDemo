@@ -20,11 +20,18 @@ class Config:
 
     # 在不需要跟踪对象变化时降低消耗
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_RECORD_QUERIES = True
 
     # 分页时每页的记录数
-    FLASKY_POSTS_PER_PAGE = int(os.environ.get('FLASKY_POSTS_PER_PAGE') or '10')
-    FLASKY_FOLLOWERS_PER_PAGE = 2
-    FLASKY_COMMENTS_PER_PAGE = 2
+    FLASKY_POSTS_PER_PAGE = 10
+    FLASKY_FOLLOWERS_PER_PAGE = 10
+    FLASKY_COMMENTS_PER_PAGE = 10
+    FLASKY_SLOW_DB_QUERY_TIME = 0.5
+
+    # debug toolbar默认会拦截重定向
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
+    # 控制debug toolbar的开关
+    DEBUG_TB_ENABLED = False
 
     @staticmethod
     def init_app(app):
@@ -53,6 +60,5 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-
     'default': DevelopmentConfig
 }
